@@ -39,7 +39,7 @@ try:
 
             # Click next page
             driver.execute_script("arguments[0].click();", next_button)
-            time.sleep(5)  # allow time for new page to load
+            time.sleep(10)  # allow time for new page to load
 
         except (NoSuchElementException, ElementClickInterceptedException):
             break
