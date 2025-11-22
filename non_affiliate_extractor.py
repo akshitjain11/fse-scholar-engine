@@ -1,6 +1,6 @@
 import csv
 
-# Path to your CSV file that contains the scraped papers
+
 INPUT_CSV = "asu_authors_papers.csv"
 OUTPUT_CSV = "non_affiliate.csv"
 
