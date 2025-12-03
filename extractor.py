@@ -4,11 +4,11 @@ from extraction.scai import professor_names as scai_professors
 
 # TODO: Add more departments
 departments = {
-    "SCAI": scai_professors,
+    "SCAI": sorted(scai_professors),
 }
 
 for dept in flor.loop("department", departments):
     names = departments[dept]
 
-    for i, name in flor.loop("faculty", enumerate(sorted(names))):
-        flor.log("name", name)
+    for i in flor.loop("faculty", range(len(names))):
+        flor.log("name", names[i])
