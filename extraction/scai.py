@@ -55,8 +55,6 @@ try:
 
     # Print results
     print(f"Total professors found: {len(professor_names)}\n")
-    for name in sorted(professor_names):
-        print(name)
 
 finally:
     driver.quit()
