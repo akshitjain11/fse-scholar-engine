@@ -2,16 +2,23 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    ElementClickInterceptedException,
+)
 from webdriver_manager.chrome import ChromeDriverManager
 import time
+
 
 def setup_driver():
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    return webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()), options=options
+    )
+
 
 try:
     driver = setup_driver()
@@ -31,7 +38,9 @@ try:
 
         # Try to find and click "Next Page"
         try:
-            next_button = driver.find_element(By.CSS_SELECTOR, 'button[aria-label="Next Page"]')
+            next_button = driver.find_element(
+                By.CSS_SELECTOR, 'button[aria-label="Next Page"]'
+            )
             disabled = next_button.get_attribute("aria-disabled")
 
             if disabled == "true":

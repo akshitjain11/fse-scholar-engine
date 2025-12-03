@@ -8,12 +8,16 @@ from webdriver_manager.chrome import ChromeDriverManager
 import csv
 import time
 
+
 def setup_driver():
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    return webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()), options=options
+    )
+
 
 def get_author_profile(driver, author_name):
     driver.get("https://scholar.google.com/")
@@ -26,7 +30,9 @@ def get_author_profile(driver, author_name):
 
     try:
         profile_link = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, '/citations?user=')]"))
+            EC.element_to_be_clickable(
+                (By.XPATH, "//a[contains(@href, '/citations?user=')]")
+            )
         )
         profile_link.click()
         time.sleep(2)
@@ -35,13 +41,17 @@ def get_author_profile(driver, author_name):
         print(f"❌ No Google Scholar profile found for '{author_name}'.")
         return False
 
+
 def is_affiliated_with_asu(driver):
     try:
         aff_elem = driver.find_element(By.ID, "gsc_prf_i")
         affiliation_text = aff_elem.text.lower()
-        return ("arizona state university" in affiliation_text) or ("asu" in affiliation_text)
+        return ("arizona state university" in affiliation_text) or (
+            "asu" in affiliation_text
+        )
     except:
         return False
+
 
 def get_scholar_papers(driver, max_papers=100):
     papers = []
@@ -53,7 +63,9 @@ def get_scholar_papers(driver, max_papers=100):
                 link_elem = row.find_element(By.CSS_SELECTOR, ".gsc_a_t a")
                 title = link_elem.text.strip()
                 link = link_elem.get_attribute("href")
-                year_elem = row.find_element(By.CSS_SELECTOR, ".gsc_a_y span").text.strip()
+                year_elem = row.find_element(
+                    By.CSS_SELECTOR, ".gsc_a_y span"
+                ).text.strip()
                 if title and link:
                     papers.append({"title": title, "link": link, "year": year_elem})
             except:
@@ -74,6 +86,7 @@ def get_scholar_papers(driver, max_papers=100):
             break
 
     return papers
+
 
 def process_authors(author_list):
     driver = setup_driver()
@@ -100,6 +113,7 @@ def process_authors(author_list):
     driver.quit()
     return results, asu_affiliated_count, total_authors
 
+
 def save_to_csv(results, filename="asu_authors_papers.csv"):
     keys = ["author", "title", "link", "year"]
     with open(filename, "w", newline="", encoding="utf-8") as f:
@@ -108,20 +122,69 @@ def save_to_csv(results, filename="asu_authors_papers.csv"):
         writer.writerows(results)
     print(f"\n💾 Saved results to {filename}")
 
+
 if __name__ == "__main__":
     authors = [
-        "Yezhou Yang", "Adam Doupé", "Adil Ahmad", "Aman Arora", "Andrea Richa", "Ariane Middel",
-        "Arunabha Sen", "Aviral Shrivastava", "Bing Si", "Chitta Baral", "Chris Bryan",
-        "Dimitri Bertsekas", "Douglas Montgomery", "Feng Ju", "Fish Wang", "Gail-Joon Ahn",
-        "George Runger", "Geunyeong Byeon", "Giulia Pedrielli", "Guoliang Xue", "Hani Ben Amor",
-        "Hao Yan", "Hasan Davulcu", "Hessam Sarjoughian", "Huan Liu", "James Collofello",
-        "Jedidiah Crandall", "Joshua Daymude", "K. Selcuk Candan", "Kevin Gary", "Lacy Greening",
-        "Michel Kinsy", "Ming Zhao", "Nakul Gopalan", "Paul Grogan", "Rakibul Hasan", "Rida Bazzi",
-        "Robert Atkinson", "Rong Pan", "Ross Maciejewski", "Sandeep Gupta", "Sarma Vrudhula",
-        "Sethuraman Panchanathan", "Siddharth Srivastava", "Srividya Bansal", "Stephanie Forrest",
-        "Stephen Yau", "Subbarao Kambhampati", "Ted Pavlic", "Teresa Wu", "Tiffany Bao",
-        "Violet Syrotiuk", "Vivek Gupta", "Xusheng Xiao", "Yalin Wang", "Yan Shoshitaishvili",
-        "Yanjie Fu", "YooJung Choi", "Yu Zhang", "Zhichao Cao"
+        "Yezhou Yang",
+        "Adam Doupé",
+        "Adil Ahmad",
+        "Aman Arora",
+        "Andrea Richa",
+        "Ariane Middel",
+        "Arunabha Sen",
+        "Aviral Shrivastava",
+        "Bing Si",
+        "Chitta Baral",
+        "Chris Bryan",
+        "Dimitri Bertsekas",
+        "Douglas Montgomery",
+        "Feng Ju",
+        "Fish Wang",
+        "Gail-Joon Ahn",
+        "George Runger",
+        "Geunyeong Byeon",
+        "Giulia Pedrielli",
+        "Guoliang Xue",
+        "Hani Ben Amor",
+        "Hao Yan",
+        "Hasan Davulcu",
+        "Hessam Sarjoughian",
+        "Huan Liu",
+        "James Collofello",
+        "Jedidiah Crandall",
+        "Joshua Daymude",
+        "K. Selcuk Candan",
+        "Kevin Gary",
+        "Lacy Greening",
+        "Michel Kinsy",
+        "Ming Zhao",
+        "Nakul Gopalan",
+        "Paul Grogan",
+        "Rakibul Hasan",
+        "Rida Bazzi",
+        "Robert Atkinson",
+        "Rong Pan",
+        "Ross Maciejewski",
+        "Sandeep Gupta",
+        "Sarma Vrudhula",
+        "Sethuraman Panchanathan",
+        "Siddharth Srivastava",
+        "Srividya Bansal",
+        "Stephanie Forrest",
+        "Stephen Yau",
+        "Subbarao Kambhampati",
+        "Ted Pavlic",
+        "Teresa Wu",
+        "Tiffany Bao",
+        "Violet Syrotiuk",
+        "Vivek Gupta",
+        "Xusheng Xiao",
+        "Yalin Wang",
+        "Yan Shoshitaishvili",
+        "Yanjie Fu",
+        "YooJung Choi",
+        "Yu Zhang",
+        "Zhichao Cao",
     ]
 
     results, asu_count, total = process_authors(authors)
