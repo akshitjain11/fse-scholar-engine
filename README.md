@@ -1,11 +1,12 @@
 # ASU FSE Scholar Scraper
 
-This repository contains two scripts that work together to extract **ASU SCAI faculty names** and gather their **Google Scholar publication data**.
+This repository contains two scripts that work together to extract **ASU Fulton Schools of Engineering (FSE) faculty names** and gather their publication data.
 
 ---
 
 ## 📌 1. `extractor.py` — ASU SCAI Faculty Extractor
 
+We begin with SCAI (School of Computing and Augmented Intelligence) as our initial target department.
 This script scrapes the **ASU SCAI faculty directory** and collects the names of all listed professors.
 
 ### **Features**
@@ -18,7 +19,7 @@ This script scrapes the **ASU SCAI faculty directory** and collects the names of
 ### **Usage**
 
 ```bash
-python extractor.py
+make extract-faculty
 ```
 
 ### **Output**
