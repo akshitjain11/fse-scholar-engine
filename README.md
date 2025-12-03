@@ -2,9 +2,16 @@
 
 This repository contains two scripts that work together to extract **ASU Fulton Schools of Engineering (FSE) faculty names** and gather their publication data.
 
----
 
-## 📌 1. `extractor.py` — ASU SCAI Faculty Extractor
+## 🛠 Requirements
+
+Install dependencies with:
+
+```bash
+make .venv
+```
+
+## 1. `extractor.py` — ASU FSE Faculty Extractor
 
 We begin with SCAI (School of Computing and Augmented Intelligence) as our initial target department.
 This script scrapes the **ASU SCAI faculty directory** and collects the names of all listed professors.
@@ -23,16 +30,17 @@ make extract-faculty
 ```
 
 ### **Output**
+```
+python -m flordb dataframe name
+```
 
-Prints the total number of faculty and their names.
+Prints dataframe of faculty and their names.
 
----
+##  2. `main.py` — Publications Crawler
 
-## 📌 2. `main.py` — Google Scholar Crawler
+Crawls the last 10 years of publications for each ASU FSE professor:
 
-This script takes a list of professor names and:
-
-1. Searches each name on Google Scholar
+1. Searches each name on Google Scholar, DBLP, or Semantic Scholar
 2. Opens the first matching profile
 3. Checks if the professor is affiliated with **Arizona State University**
 4. Scrapes up to 100 papers, including:
@@ -46,35 +54,22 @@ This script takes a list of professor names and:
 ### **Usage**
 
 ```bash
-python main.py
+make asu_authors_papers.csv
 ```
-
-### **Output**
+**Output**
 
 A CSV file named:
-
-```
-asu_authors_papers.csv
-```
+`asu_authors_papers.csv`
 
 Containing:
 
 | author | title | link | year |
 | ------ | ----- | ---- | ---- |
 
----
 
-## 🛠 Requirements
 
-Install dependencies with:
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## 📌 3. `non_affiliate_extractor.py` — Google Scholar Crawler
+## Miscellaneous
+#### `non_affiliate_extractor.py` — Google Scholar Crawler
 
 This script identifies **which professors from the master list did NOT appear in the Google Scholar CSV**, meaning they were either:
 
@@ -84,66 +79,17 @@ This script identifies **which professors from the master list did NOT appear in
 
 It outputs a clean CSV containing only the **non-affiliated or missing authors**.
 
----
+   1. Loads the full list of all expected authors.
+   2. Reads the `asu_authors_papers.csv` file.
+   3. Compares the two lists.
+   4. Saves results to `non_affiliate.csv`.
 
-## 📌 What the Script Does
+Run:
+```bash
+make non_affiliate.csv
+```
 
-### **1. Loads the full list of 60 SCAI faculty**
+**Output:** A single-column CSV:
 
-These represent all expected authors.
-
-### **2. Reads `asu_authors_papers.csv`**
-
-This file contains authors whose Scholar profiles _were found_ and confirmed to be **ASU-affiliated**.
-
-### **3. Compares the two lists**
-
-Any author missing from the CSV is labeled as **non-affiliate**.
-
-### **4. Saves results to `non_affiliate.csv`**
-
-A single-column CSV:
-
-\`\`\`
-author
-John Doe
-Jane Smith
-...
-\`\`\`
-
----
-
-## 🧠 Functions Overview
-
-### \`extract_csv_authors(csv_path)\`
-
-Reads the Scholar CSV and extracts all unique author names.
-
-### \`find_non_affiliates(all_authors, affiliated_authors)\`
-
-Computes the set difference → authors not found in the CSV.
-
-### \`save_to_csv(authors, filename)\`
-
-Writes all non-affiliated authors to a clean CSV file.
-
----
-
-## 🚀 Usage
-
-Run the script:
-
-\`\`\`bash
-python non_affiliate_extractor.py
-\`\`\`
-
----
-
-## 📦 Output Files
-
-| File                       | Description                                             |
-| -------------------------- | ------------------------------------------------------- |
-| \`asu_authors_papers.csv\` | Input file containing confirmed ASU-affiliated authors  |
-| \`non_affiliate.csv\`      | Output file containing missing / non-affiliated authors |
-
----
+| author |
+| ------ |
